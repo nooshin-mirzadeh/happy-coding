@@ -36,6 +36,7 @@ class Problem:
         self.r = []
         self.x = 0
         self.cache_endpoints = defaultdict(set)
+        self.rmap = defaultdict(lambda: 0)
 
 
 
@@ -54,6 +55,7 @@ class Problem:
 
         for _ in range(r):
             (rv, re, rn) = map(int, fob.readline().split())
+            self.rmap[(rv,re)] = rn
             self.r.append((rv,re,rn,rn/self.s[rv]))
 
 
@@ -81,7 +83,7 @@ class Solution:
         for e in self.problem.cache_endpoints[c]:
             maybe_impr = self.latency(e,v) - self.problem.e[e].lc[c]
             if maybe_impr > 0:
-                impr += maybe_impr
+                impr += maybe_impr * self.problem.rmap[(v,e)]
         return impr
 
     def validate(self):
