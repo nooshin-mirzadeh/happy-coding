@@ -43,12 +43,12 @@ class Problem:
 
         for _ in range(r):
             (rv, re, rn) = map(int, fob.readline().split())
-            self.r.append((rv,re,rn))
+            self.r.append((rv,re,rn,rn/self.s[rv]))
 
         return self
 
     def sort_request(self):
-        self.sr = sorted(self.r, key = itemgetter(2)/itemgetter(0), reverse=True )
+        self.sr = sorted(self.r, key = itemgetter(3), reverse=True )
 
 class Solution:
     def __init__(self, problem):
@@ -76,7 +76,7 @@ class Solution:
     def score(self):
         saved = 0
         total = 0
-        for (rv,re,rn) in self.problem.r:
+        for (rv,re,rn,_) in self.problem.r:
             saved += rn * self.saved(rv,re)
             total += rn
 
@@ -90,10 +90,8 @@ class Solution:
 
 def test():
     p = Problem().load(open('sample'))
-
-p = Problem().load(open('sample'))
-p.sort_request()
-print(p.sr)
+    p.sort_request()
+    print(p.sr)
     s = Solution(p)
     s.cache[0] = {2}
     s.cache[1] = {3,1}
