@@ -9,6 +9,7 @@ class Endpoint:
     def __init__(self):
         self.ld = None
         self.lc = {}
+        self.best = []
 
     def load(self, fob):
         (self.ld, k) = map(int, fob.readline().split())
@@ -16,6 +17,10 @@ class Endpoint:
         for _ in range(k):
             (c, lc) = map(int, fob.readline().split())
             self.lc[c] = lc
+            self.best.append(c)
+
+        self.best.sort(key=lambda c: self.lc[c])
+
         return self
 
 
@@ -30,6 +35,9 @@ class Problem:
         # self.r = defaultdict(lambda: 0)
         self.r = []
         self.x = 0
+        self.cache_endpoints = defaultdict(set)
+
+
 
     def load(self, fob):
 
@@ -38,12 +46,16 @@ class Problem:
 
         assert len(self.s) == v
 
-        for _ in range(e):
-            self.e.append(Endpoint().load(fob))
+        for i in range(e):
+            e = Endpoint().load(fob)
+            self.e.append(e)
+            for c in e.lc:
+                self.cache_endpoints[c].add(i)
 
         for _ in range(r):
             (rv, re, rn) = map(int, fob.readline().split())
             self.r.append((rv,re,rn,rn/self.s[rv]))
+
 
         return self
 
@@ -55,6 +67,22 @@ class Solution:
         self.cache = defaultdict(set)
         self.cacheusage = defaultdict(lambda: 0)
         self.problem = problem
+
+    def latency(self, e, v):
+        endpoint = self.problem.e[e]
+        for c in endpoint.best:
+            if v in self.cache[c]:
+                return endpoint.lc[c]
+
+        return endpoint.ld
+
+    def improvement(self, c, v):
+        impr = 0
+        for e in self.problem.cache_endpoints[c]:
+            maybe_impr = self.latency(e,v) - self.problem.e[e].lc[c]
+            if maybe_impr > 0:
+                impr += maybe_impr
+        return impr
 
     def validate(self):
         for (c, vs) in self.cache.items():
@@ -71,10 +99,16 @@ class Solution:
             return True
     
     def best_place(self, k):
+        pass
         
         
 
     def place(self, c, v):
+
+        #DEBUG
+        print("Current score is {}".format(self.score()))
+        print("Predicted improvement is {}".format(self.improvement(c,v)))
+
         if v in self.cache[c]:
             return True
         
@@ -84,6 +118,8 @@ class Solution:
 
         self.cache[c].add(v)
         self.cacheusage[c] += s
+        print("Placed successfully, new score is {}".format(self.score()))
+
         return True
 
 
@@ -123,6 +159,8 @@ def test():
     p.sort_request()
     print(p.sr)
     s = Solution(p)
+
+
     s.place(0,2)
     s.place(1,3)
     s.place(1,1)
