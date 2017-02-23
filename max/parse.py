@@ -105,10 +105,6 @@ class Solution:
 
     def place(self, c, v):
 
-        #DEBUG
-        print("Current score is {}".format(self.score()))
-        print("Predicted improvement is {}".format(self.improvement(c,v)))
-
         if v in self.cache[c]:
             return True
         
@@ -118,7 +114,6 @@ class Solution:
 
         self.cache[c].add(v)
         self.cacheusage[c] += s
-        print("Placed successfully, new score is {}".format(self.score()))
 
         return True
 
@@ -154,6 +149,14 @@ def greedy(problem):
     pass
 
 
+def greedy2(problem):
+    cases = list((c,v) for v in range(len(problem.s)) for c in range(len(problem.cache_endpoints)))
+    s = Solution(problem)
+    while cases:
+        cases.sort(key=(lambda x: s.improvement(*x)))
+        s.place(*cases.pop())
+    return s
+
 def test():
     p = Problem().load(open('sample'))
     p.sort_request()
@@ -172,6 +175,11 @@ def test():
     print("Saved {}".format(s.score()), file=stderr)
 
     s.output(stdout)
+
+    g2 = greedy2(p)
+
+    print("Greedy2 solution, with score {}, validate {}".format(g2.score(), g2.validate()))
+    g2.output(stdout)
 
 if __name__ == '__main__':
     test()
