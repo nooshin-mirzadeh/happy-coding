@@ -56,7 +56,7 @@ class Solution:
         self.cacheusage = defaultdict(lambda: 0)
         self.problem = problem
 
-    def validate():
+    def validate(self):
         for (c, vs) in self.cache.items():
             if sum(self.problem.s[vid] for vid in vs) > self.problem.x:
                 return False
@@ -117,6 +117,8 @@ def test():
     s.place(1,1)
     s.place(2,0)
     s.place(2,1)
+
+    assert s.validate()
 
     print("Saved {}".format(s.score()), file=stderr)
 
