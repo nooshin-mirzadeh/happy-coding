@@ -63,6 +63,17 @@ class Solution:
 
         return True
 
+    def is_fit(self, c, v):
+        s = self.problem.s[v]
+        if self.cacheusage[c] + s > self.problem.x:
+            return False
+        else:
+            return True
+    
+    def best_place(self, k):
+        
+        
+
     def place(self, c, v):
         if v in self.cache[c]:
             return True
