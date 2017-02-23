@@ -26,7 +26,7 @@ class Problem:
 
         self.s = []
         self.e = []
-        self.r = defaultdict(lambda: 0)
+        self.r = []
         self.x = 0
 
     def load(self, fob):
@@ -41,7 +41,7 @@ class Problem:
 
         for _ in range(r):
             (rv, re, rn) = map(int, fob.readline().split())
-            self.r[(rv,re)] = rn 
+            self.r.append((rv,re,rn))
 
         return self
 
@@ -71,7 +71,7 @@ class Solution:
     def score(self):
         saved = 0
         total = 0
-        for ((rv,re),rn) in self.problem.r.items():
+        for (rv,re,rn) in self.problem.r:
             saved += rn * self.saved(rv,re)
             total += rn
 
