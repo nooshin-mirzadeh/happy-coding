@@ -83,6 +83,11 @@ class Solution:
         for (c, vs) in self.cache.items():
             print(" ".join(map(str, chain((c,),vs))))
 
+
+def greedy(problem):
+    pass
+
+
 def test():
     p = Problem().load(open('sample'))
 
