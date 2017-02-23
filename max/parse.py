@@ -6,11 +6,11 @@ from sys import stdout
 class Endpoint:
     def __init__(self):
         self.ld = None
-        self.lc = []
+        self.lc = {}
 
     def load(self, fob):
         (self.ld, k) = map(int, fob.readline().split())
-        self.lc = [None]*k
+
         for _ in range(k):
             (c, lc) = map(int, fob.readline().split())
             self.lc[c] = lc
@@ -26,10 +26,11 @@ class Problem:
         self.s = []
         self.e = []
         self.r = defaultdict(lambda: 0)
+        self.x = 0
 
     def load(self, fob):
 
-        (v, e, r, c, x) = map(int, fob.readline().split())
+        (v, e, r, c, self.x) = map(int, fob.readline().split())
         self.s = list(map(int, fob.readline().split()))
 
         assert len(self.s) == v
@@ -44,8 +45,24 @@ class Problem:
         return self
 
 class Solution:
-    def __init__(self):
+    def __init__(self, problem):
         self.cache = {}
+        self.problem = problem
+
+    def validate():
+        for (c, vs) in self.cache.items():
+            if sum(self.problem.s[vid] for vid in vs) > self.problem.x:
+                return False
+
+        return True
+
+    def best(self, rv, re):
+        for (c,lc) in self.e[re].lc:
+            pass
+
+    def score(self):
+        pass
+        
 
     def output(self, fd):
         print(len(self.cache), file=fd)
