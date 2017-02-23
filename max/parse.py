@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 
 from collections import defaultdict
-from sys import stdout
+from itertools import chain
+from sys import stdout,stderr
 
 class Endpoint:
     def __init__(self):
@@ -56,25 +57,39 @@ class Solution:
 
         return True
 
-    def best(self, rv, re):
-        for (c,lc) in self.e[re].lc:
-            pass
+    def saved(self, rv, re):
+        e = self.problem.e[re]
+        ld = e.ld
+        l = ld
+
+        for (c,lc) in e.lc.items():
+            if lc < ld and rv in self.cache[c]:
+                l = lc
+
+        return ld - l
 
     def score(self):
-        pass
+        saved = 0
+        for ((rv,re),rn) in self.problem.r.items():
+            saved += rn * self.saved(rv,re)
+
+        return saved
         
 
     def output(self, fd):
         print(len(self.cache), file=fd)
         for (c, vs) in self.cache.items():
-            print(" ".join(map(str, [c] + vs)))
+            print(" ".join(map(str, chain((c,),vs))))
 
 
+p = Problem().load(open('sample'))
 
-#s = Solution()
-#s.cache[0] = [2]
-#s.cache[1] = [3,1]
-#s.cache[2] = [0,1]
-#
-#s.output(stdout)
+s = Solution(p)
+s.cache[0] = {2}
+s.cache[1] = {3,1}
+s.cache[2] = {0,1}
+
+print("Saved {}".format(s.score()), file=stderr)
+
+s.output(stdout)
 
