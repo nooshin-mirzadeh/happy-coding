@@ -1,4 +1,7 @@
+#!/usr/bin/python3
+
 from collections import defaultdict
+from sys import stdout
 
 class Endpoint:
     def __init__(self):
@@ -40,5 +43,21 @@ class Problem:
 
         return self
 
+class Solution:
+    def __init__(self):
+        self.cache = {}
 
-p = Problem().load(open('sample'))
+    def output(self, fd):
+        print(len(self.cache), file=fd)
+        for (c, vs) in self.cache.items():
+            print(" ".join(map(str, [c] + vs)))
+
+
+
+#s = Solution()
+#s.cache[0] = [2]
+#s.cache[1] = [3,1]
+#s.cache[2] = [0,1]
+#
+#s.output(stdout)
+
