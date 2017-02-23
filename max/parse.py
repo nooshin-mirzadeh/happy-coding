@@ -52,7 +52,8 @@ class Problem:
 
 class Solution:
     def __init__(self, problem):
-        self.cache = {}
+        self.cache = defaultdict(set)
+        self.cacheusage = defaultdict(lambda: 0)
         self.problem = problem
 
     def validate():
@@ -61,6 +62,19 @@ class Solution:
                 return False
 
         return True
+
+    def place(self, c, v):
+        if v in self.cache[c]:
+            return True
+        
+        s = self.problem.s[v]
+        if self.cacheusage[c] + s > self.problem.x:
+            return False
+
+        self.cache[c].add(v)
+        self.cacheusage[c] += s
+        return True
+
 
     def saved(self, rv, re):
         e = self.problem.e[re]
@@ -98,9 +112,11 @@ def test():
     p.sort_request()
     print(p.sr)
     s = Solution(p)
-    s.cache[0] = {2}
-    s.cache[1] = {3,1}
-    s.cache[2] = {0,1}
+    s.place(0,2)
+    s.place(1,3)
+    s.place(1,1)
+    s.place(2,0)
+    s.place(2,1)
 
     print("Saved {}".format(s.score()), file=stderr)
 
