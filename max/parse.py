@@ -3,6 +3,7 @@
 from collections import defaultdict
 from itertools import chain
 from sys import stdout,stderr
+from operator import itemgetter, attrgetter, methodcaller
 
 class Endpoint:
     def __init__(self):
@@ -26,7 +27,8 @@ class Problem:
 
         self.s = []
         self.e = []
-        self.r = defaultdict(lambda: 0)
+        # self.r = defaultdict(lambda: 0)
+        self.r = []
         self.x = 0
 
     def load(self, fob):
@@ -41,9 +43,12 @@ class Problem:
 
         for _ in range(r):
             (rv, re, rn) = map(int, fob.readline().split())
-            self.r[(rv,re)] = rn 
+            self.r = (rv, re, rn) 
 
         return self
+
+    def sort_request(self):
+        self.sr = sorted(self.r, key = itemgetter(2)/itemgetter(0), reverse=True )
 
 class Solution:
     def __init__(self, problem):
@@ -83,6 +88,8 @@ class Solution:
 
 
 p = Problem().load(open('sample'))
+p.sort_request()
+print(p.sr)
 
 s = Solution(p)
 s.cache[0] = {2}
