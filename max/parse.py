@@ -70,10 +70,12 @@ class Solution:
 
     def score(self):
         saved = 0
+        total = 0
         for ((rv,re),rn) in self.problem.r.items():
             saved += rn * self.saved(rv,re)
+            total += rn
 
-        return saved
+        return saved / total
         
 
     def output(self, fd):
