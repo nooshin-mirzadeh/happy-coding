@@ -3,6 +3,7 @@
 from collections import defaultdict
 from itertools import chain
 from sys import stdout,stderr
+from operator import itemgetter, attrgetter, methodcaller
 
 class Endpoint:
     def __init__(self):
@@ -26,6 +27,7 @@ class Problem:
 
         self.s = []
         self.e = []
+        # self.r = defaultdict(lambda: 0)
         self.r = []
         self.x = 0
 
@@ -44,6 +46,9 @@ class Problem:
             self.r.append((rv,re,rn))
 
         return self
+
+    def sort_request(self):
+        self.sr = sorted(self.r, key = itemgetter(2)/itemgetter(0), reverse=True )
 
 class Solution:
     def __init__(self, problem):
@@ -91,6 +96,9 @@ def greedy(problem):
 def test():
     p = Problem().load(open('sample'))
 
+p = Problem().load(open('sample'))
+p.sort_request()
+print(p.sr)
     s = Solution(p)
     s.cache[0] = {2}
     s.cache[1] = {3,1}
