@@ -88,17 +88,21 @@ class Solution:
         for (c, vs) in self.cache.items():
             print(" ".join(map(str, chain((c,),vs))))
 
+def test():
+    p = Problem().load(open('sample'))
 
 p = Problem().load(open('sample'))
 p.sort_request()
 print(p.sr)
+    s = Solution(p)
+    s.cache[0] = {2}
+    s.cache[1] = {3,1}
+    s.cache[2] = {0,1}
 
-s = Solution(p)
-s.cache[0] = {2}
-s.cache[1] = {3,1}
-s.cache[2] = {0,1}
+    print("Saved {}".format(s.score()), file=stderr)
 
-print("Saved {}".format(s.score()), file=stderr)
+    s.output(stdout)
 
-s.output(stdout)
+if __name__ == '__main__':
+    test()
 
